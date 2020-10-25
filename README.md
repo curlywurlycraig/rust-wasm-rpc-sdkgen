@@ -13,7 +13,7 @@ from both the front and backend.
 - [ ] Generate both a wasm + binary application from the same codebase
   - [x] Practise making attributes
   - [ ] Create an attribute that generates the serialisation + deserialisation on backend
-    - [ ] Decode inputs
+    - [x] Decode inputs
     - [ ] Encode outputs
   - [ ] Do the same for frontend
     - [ ] Need to transform inputs into a tuple before serialisation

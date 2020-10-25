@@ -19,17 +19,6 @@ fn add_todo(mut new_todo: Todo) {
     println!("Got a new todo! {:?}", new_todo);
 }
 
-fn encode_todo(todo: &Todo) -> &str {
-    // encode as utf8 str
-    let encoded: Vec<u8> = bincode::serialize(todo).unwrap();
-    let result = String::from_utf8(encoded).unwrap();
-    return format!("{}", result);
-}
-
-fn decode_todo(bytes: &[u8]) -> Todo {
-    bincode::deserialize(bytes).unwrap()
-}
-
 #[tokio::main]
 async fn main() {
     let get_todo = warp::path!("get_todo")
@@ -40,7 +29,7 @@ async fn main() {
     let add_todo = warp::path!("add_todo")
         .and(warp::body::bytes())
         .map(|body: warp::hyper::body::Bytes| {
-            add_todo(&body)
+            add_todo(body)
         }).with(warp::cors().allow_any_origin());
 
     let routes = get_todo

@@ -1,7 +1,7 @@
 use proc_macro::TokenStream;
 use quote::quote;
 use syn;
-use syn::{Stmt, Pat, parse_quote, FnArg, PatTuple, TypeTuple};
+use syn::{Stmt, Pat, parse_quote, FnArg, PatTuple, TypeTuple, PatType, Type};
 use syn::punctuated::Punctuated;
 use syn::token::{Paren, Comma};
 use syn::FnArg::{Receiver, Typed};
@@ -50,31 +50,29 @@ fn impl_remote(mut ast: syn::ItemFn) -> TokenStream {
     // Get short variables for quote
     let attrs = &ast.attrs;
     let vis = &ast.vis;
-    let sig = &ast.sig;
+    let sig = &mut ast.sig;
     let statements = &mut ast.block.stmts;
 
     // Determine what the args are as a tuple
     let inputs = &sig.inputs;
     let input_args_as_tuple = get_input_args_as_pat_tuple(&inputs);
     let input_args_as_type_tuple = get_input_args_as_type_tuple(&inputs);
-    println!("Craig they are {:#?}", &input_args_as_tuple);
 
-    // Determine new signature with Vec<u8>
-
+    // Decode Vec<u8> into the tuple args
     let decode_input_statements: Vec<Stmt> = parse_quote! {
-        // Decode Vec<u8> into the tuple args
-        #input_args_as_tuple
-
-        // Spread out args using pattern, which should now be available to rest of statements
-
-        // Example args declaration:
-        // let (first, second): (i32, Todo) = bincode::deserialize(input_bytes.unwrap);
-        // let #args_declaration = bincode::deserialize(input_bytes).unwrap();
+        let #input_args_as_tuple: #input_args_as_type_tuple = bincode::deserialize(bytes).unwrap();
     };
 
     statements.splice(0..0, decode_input_statements);
 
     let block = &ast.block;
+
+    sig.inputs = Punctuated::new();
+
+    let input_fn_arg: FnArg = parse_quote! {
+        bytes: Vec<u8>
+    };
+    sig.inputs.push(input_fn_arg);
 
     let gen = quote! {
         #vis #sig #block
