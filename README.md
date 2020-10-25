@@ -30,7 +30,7 @@ from both the front and backend.
 
 An ideated application is shown below:
 
-```
+```rust
 #[mirror]
 struct Todo {
     ...
