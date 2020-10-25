@@ -24,3 +24,44 @@ from both the front and backend.
 - [ ] Reduce .wasm size
 - [ ] Future fun things
   - [ ] Security, virtualdom, etc
+
+
+# Example
+
+An ideated application is shown below:
+
+```
+#[mirror]
+struct Todo {
+    ...
+}
+
+#[remote]
+fn get_todos() -> Vec<Todo> {
+
+}
+
+#[remote]
+fn mark_as_done(todo: &Todo) {
+    // SQL
+}
+
+#[url("/todos")]
+fn main() {
+    html!{
+        <div>
+            { get_todos().iter().map(|todo| {
+                html!{
+                    <button
+                        on_click={|| {
+                            mark_as_done(&todo)
+                        }}
+                    />
+                }
+            })}
+        </div>
+    }
+}
+```
+
+Where the html is server-side rendered, and the `on_click` handler for the button is able to call `get_todos()` and `mark_as_done(todo)` from the frontend, even though only the corresponding backend logic needs to be written for them.
