@@ -12,9 +12,9 @@ from both the front and backend.
 - [x] Create a client that can call that endpoint, by creating bindgen signatures.
 - [ ] Generate both a wasm + binary application from the same codebase
   - [x] Practise making attributes
-  - [ ] Create an attribute that generates the serialisation + deserialisation on backend
+  - [x] Create an attribute that generates the serialisation + deserialisation on backend
     - [x] Decode inputs
-    - [ ] Encode outputs
+    - [x] Encode outputs
   - [ ] Do the same for frontend
     - [ ] Need to transform inputs into a tuple before serialisation
   - [ ] Generalise endpoint solution for both todo tasks
