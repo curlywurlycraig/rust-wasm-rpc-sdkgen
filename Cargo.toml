@@ -4,11 +4,58 @@ version = "0.1.0"
 authors = ["Craig Wilkinson <curlywurlycraig@gmail.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+frontend = ["console_error_panic_hook", "wasm-bindgen", "wasm-bindgen-futures", "js-sys", "wee_alloc", "web-sys"]
+backend = ["tokio", "warp"]
+
+[profile.release]
+opt-level = "s"
 
 [dependencies]
+# Required deps
 bincode = "1.3.1"
-serde = { version = "1.0.63", features = ["derive"] }
-tokio = { version = "0.2", features = ["full"] }
-warp = "0.2"
+serde = { version = "1.0.80", features = ["derive"] }
+serde_derive = "^1.0.59"
 remote_attr = { path = "./remote_attr" }
+
+# Backend deps
+tokio = { version = "0.2", features = ["full"], optional = true }
+warp = { version = "0.2", optional = true }
+
+# Frontend deps
+wasm-bindgen = { version = "0.2.68", features = ["serde-serialize"], optional = true  }
+wasm-bindgen-futures = { version = "0.4.18", optional = true }
+js-sys = { version = "0.3.45", optional = true }
+
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.6", optional = true }
+
+# `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
+# compared to the default allocator's ~10K. It is slower than the default
+# allocator, however.
+#
+# Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
+wee_alloc = { version = "0.4.5", optional = true }
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+  'Headers',
+  'ReadableStream',
+  'Request',
+  'RequestInit',
+  'RequestMode',
+  'Response',
+  'Window',
+]
+optional = true
+
+[dev-dependencies]
+wasm-bindgen-test = { version = "0.3.13" }

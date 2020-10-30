@@ -2,23 +2,7 @@ use bincode;
 use serde::{Serialize, Deserialize};
 use warp::Filter;
 use remote_attr::remote;
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Todo {
-    pub id: u8,
-    pub content: String,
-    pub completed: bool
-}
-
-#[remote]
-fn get_todo() -> Todo {
-    Todo { id: 10, content: String::from("Hello craig!"), completed: false }
-}
-
-#[remote]
-fn add_todo(mut new_todo: Todo) {
-    println!("Got a new todo! {:?}", new_todo);
-}
+use entities::todo::{add_todo, get_todo};
 
 #[tokio::main]
 async fn main() {
