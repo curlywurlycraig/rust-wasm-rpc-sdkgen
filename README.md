@@ -24,7 +24,7 @@ from both the front and backend.
     - [x] Write frontend part of remote attribute
   - [x] Serialise and deserialise frontend
     - [x] Transform inputs into a tuple before serialisation
-  - [ ] Generalise endpoint solution for both todo tasks
+  - [ ] Consolidate handling of all rpc calls in same endpoint
 - [ ] Serve pre-rendered page + wasm when visiting site.
   - [ ] Generate wasm lib output in first pass
   - [ ] Serve wasm and RPC endpoint in second pass
