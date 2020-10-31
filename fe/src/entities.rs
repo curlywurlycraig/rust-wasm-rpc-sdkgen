@@ -29,8 +29,7 @@ pub async fn get_todo() -> Todo {
     console_error_panic_hook::set_once();
 
     // Serialize input
-    // let input_as_bytes: Vec<u8> = bincode::serialize(&new_todo).unwrap();
-    // println!("input as bytes is {:?}", input_as_bytes);
+    let input_as_bytes: Vec<u8> = bincode::serialize(()).unwrap();
 
     // Create request
     let mut opts = RequestInit::new();

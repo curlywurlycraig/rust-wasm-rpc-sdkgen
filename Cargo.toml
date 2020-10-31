@@ -9,8 +9,8 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 default = []
-frontend = ["console_error_panic_hook", "wasm-bindgen", "wasm-bindgen-futures", "js-sys", "wee_alloc", "web-sys"]
-backend = ["tokio", "warp"]
+frontend = ["remote_attr/frontend", "console_error_panic_hook", "wasm-bindgen", "wasm-bindgen-futures", "js-sys", "wee_alloc", "web-sys"]
+backend = ["remote_attr/backend", "tokio", "warp"]
 
 [profile.release]
 opt-level = "s"
@@ -20,7 +20,8 @@ opt-level = "s"
 bincode = "1.3.1"
 serde = { version = "1.0.80", features = ["derive"] }
 serde_derive = "^1.0.59"
-remote_attr = { path = "./remote_attr" }
+
+remote_attr = { path = "./remote_attr", optional = true }
 
 # Backend deps
 tokio = { version = "0.2", features = ["full"], optional = true }

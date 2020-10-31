@@ -4,6 +4,11 @@ The goal of this project is to create a tool for building full stack Rust web ap
 In particular, it aims to allow for the definition of functions that are callable
 from both the front and backend.
 
+## Running
+
+1. Generate wasm lib: `wasm-pack build -- --features "frontend"
+2. Serve backend: `cargo run --bin ideal_http --features "backend"
+
 ## Next steps
 
 - [x] Work out how serialization/deserialization can be done. (Learn to use bincode)
@@ -15,23 +20,27 @@ from both the front and backend.
   - [x] Create an attribute that generates the serialisation + deserialisation on backend
     - [x] Decode inputs
     - [x] Encode outputs
-  - [ ] Do the same for frontend
-    - [ ] Need to transform inputs into a tuple before serialisation
+  - [x] Use conditional compilation
+    - [x] Write frontend part of remote attribute
+  - [x] Serialise and deserialise frontend
+    - [x] Transform inputs into a tuple before serialisation
   - [ ] Generalise endpoint solution for both todo tasks
-  - [ ] Generalise frontend solution for both todo tasks (serialisation + deserialisation)
-  - [ ] Use conditional compilation https://doc.rust-lang.org/reference/conditional-compilation.html
-  - [ ] Serve pre-rendered page + wasm when visiting site.
+- [ ] Serve pre-rendered page + wasm when visiting site.
+  - [ ] Generate wasm lib output in first pass
+  - [ ] Serve wasm and RPC endpoint in second pass
 - [ ] Reduce .wasm size
 - [ ] Future fun things
   - [ ] Security, virtualdom, etc
 
+# Thoughts
+
+Think about the ownership model. When calling a function that sends something over RPC for example, it can't be a reference because a reference can't be serialised (or can it?). So when passing an entity to the backend via an RPC call, who owns it?
 
 # Example
 
 An ideated application is shown below:
 
 ```rust
-#[mirror]
 struct Todo {
     ...
 }

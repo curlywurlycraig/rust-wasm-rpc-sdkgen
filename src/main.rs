@@ -1,8 +1,7 @@
-use bincode;
-use serde::{Serialize, Deserialize};
 use warp::Filter;
-use remote_attr::remote;
-use entities::todo::{add_todo, get_todo};
+
+mod todo;
+use todo::{add_todo, get_todo};
 
 #[tokio::main]
 async fn main() {
