@@ -5,12 +5,12 @@ use quote::quote;
 use crate::utils::{get_input_args_as_pat_tuple};
 
 pub fn impl_frontend_remote(ast: ItemFn) -> TokenStream {
-    let endpoint = "http://localhost:3030/rpc"; // TODO read from config
-
     let ident = &ast.sig.ident;
     let fn_args = &ast.sig.inputs;
     let return_type = &ast.sig.output;
     let input_as_tuple = get_input_args_as_pat_tuple(&fn_args);
+
+    let endpoint = format!("http://localhost:3030/{}", ident); // TODO read from config
 
     let return_statement = match return_type {
         syn::ReturnType::Default => quote! { () },

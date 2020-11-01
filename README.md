@@ -6,8 +6,8 @@ from both the front and backend.
 
 ## Running
 
-1. Generate wasm lib: `wasm-pack build -- --features "frontend"`
-2. Serve backend: `cargo run --bin ideal_http --features "backend"`
+1. Generate wasm lib: `wasm-pack build -- --features frontend`
+2. Serve backend: `cargo run --bin ideal_http --features backend`
 
 ## Next steps
 
