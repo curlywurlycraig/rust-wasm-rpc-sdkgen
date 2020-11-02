@@ -1,13 +1,6 @@
 use remote_attr::remote;
 use serde::{Serialize, Deserialize};
 
-// Do away with this somehow.
-#[cfg(feature = "frontend")]
-use {
-    js_sys::Uint8Array,
-    wasm_bindgen::JsCast
-};
-
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Todo {
     pub id: u8,

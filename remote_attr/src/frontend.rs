@@ -10,7 +10,7 @@ pub fn impl_frontend_remote(ast: ItemFn) -> TokenStream {
     let return_type = &ast.sig.output;
     let input_as_tuple = get_input_args_as_pat_tuple(&fn_args);
 
-    let endpoint = format!("http://localhost:3030/{}", ident); // TODO read from config
+    let endpoint = format!("http://localhost:3030/rpc/{}", &ident); // TODO read from config
 
     let return_statement = match return_type {
         syn::ReturnType::Default => quote! { () },
@@ -18,9 +18,13 @@ pub fn impl_frontend_remote(ast: ItemFn) -> TokenStream {
     };
 
     let gen = quote! {
-        use wasm_bindgen::prelude::*;
-
         pub async fn #ident(#fn_args) #return_type {
+            use wasm_bindgen::prelude::*;
+            use {
+                js_sys::Uint8Array,
+                wasm_bindgen::JsCast
+            };
+
             let window = web_sys::window().unwrap();
 
             // This actually should be called in some init function.

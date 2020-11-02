@@ -31,10 +31,11 @@ from both the front and backend.
 - [ ] Reduce .wasm size
 - [ ] Future fun things
   - [ ] Security, virtualdom, etc
-
-# Thoughts
-
-Think about the ownership model. When calling a function that sends something over RPC for example, it can't be a reference because a reference can't be serialised (or can it?). So when passing an entity to the backend via an RPC call, who owns it?
+  - [ ] Proper TS bindings
+- [ ] Add examples
+  - [ ] Creating wasm sdk and using within a React app
+    - [ ] Show example with React
+  - [ ] SSR
 
 # Example
 

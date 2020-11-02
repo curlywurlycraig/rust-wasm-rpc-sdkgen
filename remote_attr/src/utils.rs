@@ -54,7 +54,10 @@ pub fn get_fn_with_prefixed_underscore(ast: &ItemFn) -> ItemFn {
     let mut inner_fn_definition = ast.clone();
     let sig = &inner_fn_definition.sig;
     let ident = &sig.ident;
-    let prefixed_ident: String = format!("_{}", ident);
-    inner_fn_definition.sig.ident = Ident::new(&prefixed_ident, Span::call_site());
+    inner_fn_definition.sig.ident = make_ident_from_str(&format!("_{}", ident));
     inner_fn_definition
+}
+
+pub fn make_ident_from_str(ident_str: &str) -> Ident {
+    Ident::new(&ident_str, Span::call_site())
 }

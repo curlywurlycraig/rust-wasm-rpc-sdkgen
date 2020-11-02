@@ -9,7 +9,15 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 default = []
-frontend = ["remote_attr/frontend", "console_error_panic_hook", "wasm-bindgen", "wasm-bindgen-futures", "js-sys", "wee_alloc", "web-sys"]
+frontend = [
+  "remote_attr/frontend",
+  "console_error_panic_hook",
+  "wasm-bindgen",
+  "wasm-bindgen-futures",
+  "js-sys",
+  "wee_alloc",
+  "web-sys"
+]
 backend = ["remote_attr/backend", "tokio", "warp"]
 
 [profile.release]
