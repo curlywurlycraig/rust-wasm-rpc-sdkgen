@@ -1,6 +1,4 @@
 /target
 **/target
-fe/www
 pkg/
-www/node_modules
-www/dist
+www/
