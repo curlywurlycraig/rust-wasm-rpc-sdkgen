@@ -18,11 +18,6 @@ pub fn get_todo() -> Todo {
 
 Such a function can be imported in the WASM part of the project and used as if it were a local function with the same function signature.
 
-## Running
-
-1. Generate wasm lib: `wasm-pack build -- --features frontend`
-2. Serve backend: `cargo run --bin ideal_http --features backend`
-
-# Example
+# Usage
 
 See the examples directory for usage help.
