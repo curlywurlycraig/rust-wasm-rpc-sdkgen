@@ -10,6 +10,7 @@ pub struct Todo {
 
 #[remote]
 pub fn get_todos() -> Vec<Todo> {
+    // In reality, these could come from some SQL DB or similar.
     vec![
         Todo { id: 10, content: String::from("Create new project"), completed: true },
         Todo { id: 10, content: String::from("Finish new project"), completed: false },
