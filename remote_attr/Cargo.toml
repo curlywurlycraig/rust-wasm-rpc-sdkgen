@@ -2,7 +2,7 @@
 name = "remote_attr"
 version = "0.1.0"
 authors = ["Craig Wilkinson <craig@crwi.uk>"]
-edition = "2020"
+edition = "2018"
 
 [lib]
 proc-macro = true
