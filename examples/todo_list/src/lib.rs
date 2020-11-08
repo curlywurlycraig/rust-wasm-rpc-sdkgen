@@ -3,7 +3,7 @@
 use wasm_bindgen::prelude::*;
 
 mod todo;
-use todo::{Todo, get_todo, add_todo};
+use todo::{Todo, get_todos as _get_todos, add_todo as _add_todo, mark_as_done as _mark_as_done};
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -23,14 +23,20 @@ pub fn set_panic_hook() {
 }
 
 #[wasm_bindgen]
-pub async fn do_get_todo() -> JsValue {
-    let todo: Todo = get_todo().await;
+pub async fn get_todos() -> JsValue {
+    let todo: Vec<Todo> = _get_todos().await;
 
     JsValue::from_serde(&todo).unwrap()
 }
 
 #[wasm_bindgen]
-pub async fn do_add_todo(content: JsValue) {
+pub async fn add_todo(content: JsValue) {
     let todo: Todo = content.into_serde().unwrap();
-    add_todo(todo).await;
+    _add_todo(todo).await;
+}
+
+#[wasm_bindgen]
+pub async fn mark_as_done(content: JsValue) {
+    let id: u8 = content.into_serde().unwrap();
+    _mark_as_done(id).await;
 }

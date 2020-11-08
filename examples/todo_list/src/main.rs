@@ -1,14 +1,14 @@
 use warp::Filter;
 
 mod todo;
-use todo::{add_todo, get_todo};
+use todo::{add_todo, get_todos};
 
 #[tokio::main]
 async fn main() {
-    let get_todo = warp::path!("rpc" / "get_todo")
+    let get_todo = warp::path!("rpc" / "get_todos")
         .and(warp::body::bytes())
         .map(|body: warp::hyper::body::Bytes| {
-            get_todo(&body)
+            get_todos(&body)
         }).with(warp::cors().allow_any_origin());
 
     let add_todo = warp::path!("rpc" / "add_todo")
