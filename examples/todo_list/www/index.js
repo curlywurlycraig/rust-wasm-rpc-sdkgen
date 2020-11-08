@@ -15,15 +15,15 @@ function createTodoNode(todo) {
     return newNode;
 }
 
-window.onload = async () => {
+function markTodoAsDone(id) {
+    mark_as_done(id);
+}
+
+window.onload = async function() {
     // This is how easy it is to make an RPC call!
     const todos = await get_todos();
 
     todos.forEach(todo => {
         window.document.getElementById("todos").appendChild(createTodoNode(todo));
     })
-};
-
-function markTodoAsDone(id) {
-    mark_as_done(id);
-}
+}();
