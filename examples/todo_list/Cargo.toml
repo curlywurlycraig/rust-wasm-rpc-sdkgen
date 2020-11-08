@@ -15,9 +15,7 @@ frontend = [
   "console_error_panic_hook",
   "wasm-bindgen",
   "wasm-bindgen-futures",
-  "js-sys",
   "wee_alloc",
-  "web-sys"
 ]
 backend = ["rust_wasm_rpc_sdkgen/backend", "tokio", "warp"]
 
@@ -27,7 +25,6 @@ opt-level = "s"
 [dependencies]
 rust_wasm_rpc_sdkgen = { path = "../../", optional = true }
 
-bincode = "1.3.1"
 serde = { version = "1.0.80", features = ["derive"] }
 serde_derive = "^1.0.59"
 
@@ -38,7 +35,6 @@ warp = { version = "0.2", optional = true }
 # Frontend deps
 wasm-bindgen = { version = "0.2.68", features = ["serde-serialize"], optional = true  }
 wasm-bindgen-futures = { version = "0.4.18", optional = true }
-js-sys = { version = "0.3.45", optional = true }
 
 console_error_panic_hook = { version = "0.1.6", optional = true }
 
@@ -48,19 +44,6 @@ console_error_panic_hook = { version = "0.1.6", optional = true }
 #
 # Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
 wee_alloc = { version = "0.4.5", optional = true }
-
-[dependencies.web-sys]
-version = "0.3.4"
-features = [
-  'Headers',
-  'ReadableStream',
-  'Request',
-  'RequestInit',
-  'RequestMode',
-  'Response',
-  'Window',
-]
-optional = true
 
 [dev-dependencies]
 wasm-bindgen-test = { version = "0.3.13" }

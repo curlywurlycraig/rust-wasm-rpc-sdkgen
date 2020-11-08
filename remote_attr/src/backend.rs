@@ -22,12 +22,12 @@ pub fn impl_backend_remote(ast: ItemFn) -> TokenStream {
     let inner_fn_args = get_pat_tuple_as_exprs(&input_args_as_tuple);
 
     let statements: Vec<Stmt> = parse_quote! {
-        let #input_args_as_tuple: #input_args_as_type_tuple = bincode::deserialize(bytes).unwrap();
+        let #input_args_as_tuple: #input_args_as_type_tuple = rust_wasm_rpc_sdkgen::bincode::deserialize(bytes).unwrap();
 
         #inner_fn_stmt
 
         let call_output = #inner_fn_ident(#inner_fn_args);
-        let encoded: Vec<u8> = bincode::serialize(&call_output).unwrap();
+        let encoded: Vec<u8> = rust_wasm_rpc_sdkgen::bincode::serialize(&call_output).unwrap();
         let result = String::from_utf8(encoded).unwrap();
         format!("{}", result)
     };

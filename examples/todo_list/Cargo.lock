@@ -1109,9 +1109,7 @@ checksum = "238ce071d267c5710f9d31451efec16c5ee22de34df17cc05e56cbc92e967117"
 name = "todo_list"
 version = "0.1.0"
 dependencies = [
- "bincode",
  "console_error_panic_hook",
- "js-sys",
  "rust_wasm_rpc_sdkgen",
  "serde",
  "serde_derive",
@@ -1120,7 +1118,6 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "wasm-bindgen-test",
- "web-sys",
  "wee_alloc",
 ]
 
