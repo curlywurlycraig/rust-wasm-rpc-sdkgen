@@ -1,5 +1,5 @@
 [package]
-name = "rust_wasm_rpc_sdkgen"
+name = "rust_wasm_rpcgen"
 version = "0.1.0"
 authors = ["Craig Wilkinson <craig@crwi.uk>"]
 edition = "2018"

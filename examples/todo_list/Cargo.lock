@@ -933,7 +933,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust_wasm_rpc_sdkgen"
+name = "rust_wasm_rpcgen"
 version = "0.1.0"
 dependencies = [
  "bincode",
@@ -1110,7 +1110,7 @@ name = "todo_list"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
- "rust_wasm_rpc_sdkgen",
+ "rust_wasm_rpcgen",
  "serde",
  "serde_derive",
  "tokio",

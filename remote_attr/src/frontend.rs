@@ -14,35 +14,35 @@ pub fn impl_frontend_remote(ast: ItemFn) -> TokenStream {
 
     let return_statement = match return_type {
         syn::ReturnType::Default => quote! { () },
-        _ => quote! { rust_wasm_rpc_sdkgen::bincode::deserialize(&bin[..]).unwrap() }
+        _ => quote! { rust_wasm_rpcgen::bincode::deserialize(&bin[..]).unwrap() }
     };
 
     let gen = quote! {
         pub async fn #ident(#fn_args) #return_type {
             use wasm_bindgen::prelude::*;
             use {
-                rust_wasm_rpc_sdkgen::js_sys::Uint8Array,
+                rust_wasm_rpcgen::js_sys::Uint8Array,
                 wasm_bindgen::JsCast
             };
 
-            let window = rust_wasm_rpc_sdkgen::web_sys::window().unwrap();
+            let window = rust_wasm_rpcgen::web_sys::window().unwrap();
 
             // This actually should be called in some init function.
             // It also should be disabled in production to make the wasm smaller.
             console_error_panic_hook::set_once();
 
             // Serialize input
-            let input_as_bytes: Vec<u8> = rust_wasm_rpc_sdkgen::bincode::serialize(&#input_as_tuple).unwrap();
+            let input_as_bytes: Vec<u8> = rust_wasm_rpcgen::bincode::serialize(&#input_as_tuple).unwrap();
 
             // Create request
-            let mut opts = rust_wasm_rpc_sdkgen::web_sys::RequestInit::new();
+            let mut opts = rust_wasm_rpcgen::web_sys::RequestInit::new();
             opts.method("POST");
-            opts.mode(rust_wasm_rpc_sdkgen::web_sys::RequestMode::Cors);
+            opts.mode(rust_wasm_rpcgen::web_sys::RequestMode::Cors);
             opts.body(Some(&Uint8Array::from(&input_as_bytes[..])));
 
-            let request = rust_wasm_rpc_sdkgen::web_sys::Request::new_with_str_and_init(#endpoint, &opts).unwrap();
+            let request = rust_wasm_rpcgen::web_sys::Request::new_with_str_and_init(#endpoint, &opts).unwrap();
 
-            let response: rust_wasm_rpc_sdkgen::web_sys::Response = wasm_bindgen_futures::JsFuture::from(window
+            let response: rust_wasm_rpcgen::web_sys::Response = wasm_bindgen_futures::JsFuture::from(window
                 .fetch_with_request(&request)).await
                 .unwrap()
                 .dyn_into()

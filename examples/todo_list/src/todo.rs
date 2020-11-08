@@ -1,4 +1,4 @@
-use rust_wasm_rpc_sdkgen::remote;
+use rust_wasm_rpcgen::remote;
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize)]

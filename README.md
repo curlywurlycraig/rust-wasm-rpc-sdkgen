@@ -1,8 +1,6 @@
 # About
 
-The goal of this project is to create a tool for building full stack Rust web applications.
-In particular, it aims to allow for the definition of functions that are callable
-from both the front and backend.
+`rust-wasm-rpcgen` is
 
 ## Running
 

@@ -11,19 +11,19 @@ crate-type = ["cdylib", "rlib"]
 [features]
 default = []
 frontend = [
-  "rust_wasm_rpc_sdkgen/frontend",
+  "rust_wasm_rpcgen/frontend",
   "console_error_panic_hook",
   "wasm-bindgen",
   "wasm-bindgen-futures",
   "wee_alloc",
 ]
-backend = ["rust_wasm_rpc_sdkgen/backend", "tokio", "warp"]
+backend = ["rust_wasm_rpcgen/backend", "tokio", "warp"]
 
 [profile.release]
 opt-level = "s"
 
 [dependencies]
-rust_wasm_rpc_sdkgen = { path = "../../", optional = true }
+rust_wasm_rpcgen = { path = "../../", optional = true }
 
 serde = { version = "1.0.80", features = ["derive"] }
 serde_derive = "^1.0.59"
