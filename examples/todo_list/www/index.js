@@ -1,11 +1,14 @@
-import { get_todos, add_todo } from "todo-rpc";
+import { get_todos, mark_as_done } from "todo-rpc";
 
-const createTodoNode = (todo) => {
+function createTodoNode(todo) {
     const newNode = document.createElement("p");
     const textNode = document.createTextNode(todo.content);
     const checkBoxNode = document.createElement("input");
     checkBoxNode.setAttribute("type", "checkbox");
     checkBoxNode.checked = todo.completed;
+    checkBoxNode.onchange = function onCheck() {
+        markTodoAsDone(todo.id);
+    }
 
     newNode.appendChild(checkBoxNode);
     newNode.appendChild(textNode);
@@ -20,3 +23,7 @@ window.onload = async () => {
         window.document.getElementById("todos").appendChild(createTodoNode(todo));
     })
 };
+
+function markTodoAsDone(id) {
+    mark_as_done(id);
+}
