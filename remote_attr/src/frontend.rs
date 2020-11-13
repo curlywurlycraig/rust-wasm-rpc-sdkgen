@@ -29,7 +29,7 @@ pub fn impl_frontend_remote(ast: ItemFn) -> TokenStream {
 
             // This actually should be called in some init function.
             // It also should be disabled in production to make the wasm smaller.
-            console_error_panic_hook::set_once();
+            rust_wasm_rpcgen::console_error_panic_hook::set_once();
 
             // Serialize input
             let input_as_bytes: Vec<u8> = rust_wasm_rpcgen::bincode::serialize(&#input_as_tuple).unwrap();
@@ -42,13 +42,13 @@ pub fn impl_frontend_remote(ast: ItemFn) -> TokenStream {
 
             let request = rust_wasm_rpcgen::web_sys::Request::new_with_str_and_init(#endpoint, &opts).unwrap();
 
-            let response: rust_wasm_rpcgen::web_sys::Response = wasm_bindgen_futures::JsFuture::from(window
+            let response: rust_wasm_rpcgen::web_sys::Response = rust_wasm_rpcgen::wasm_bindgen_futures::JsFuture::from(window
                 .fetch_with_request(&request)).await
                 .unwrap()
                 .dyn_into()
                 .expect("Failed to cast to response.");
 
-            let bin: Vec<u8> = wasm_bindgen_futures:: JsFuture::from(response.text().unwrap()).await.unwrap()
+            let bin: Vec<u8> = rust_wasm_rpcgen::wasm_bindgen_futures::JsFuture::from(response.text().unwrap()).await.unwrap()
                 .as_string().unwrap().into_bytes();
 
             #return_statement
