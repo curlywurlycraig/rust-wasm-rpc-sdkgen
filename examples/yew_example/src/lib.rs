@@ -9,11 +9,11 @@ use todo::{mark_as_done};
 
 struct Model {
     link: ComponentLink<Self>,
-    value: i64,
+    value: String,
 }
 
 enum Msg {
-    AddOne,
+    UpdateTodoContent(String),
 }
 
 impl Component for Model {
@@ -22,18 +22,18 @@ impl Component for Model {
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            value: 0,
+            value: String::from(""),
         }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::AddOne => {
-                self.value += 2;
-
+            Msg::UpdateTodoContent(content) => {
+                self.value = content;
                 let value_clone = self.value.clone();
+
                 spawn_local(async move {
-                    mark_as_done(value_clone as u8).await;
+                    mark_as_done(1).await;
                 });
             }
         }
@@ -50,8 +50,12 @@ impl Component for Model {
     fn view(&self) -> Html {
         html! {
             <div>
-                <button onclick=self.link.callback(|_| Msg::AddOne)>{ "+1" }</button>
-                <p>{ self.value }</p>
+                <input
+                    value={&self.value}
+                    oninput=self.link.callback(|inp: InputData| {
+                       Msg::UpdateTodoContent(inp.value)
+                    })
+                />
             </div>
         }
     }
