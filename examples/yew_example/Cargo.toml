@@ -15,7 +15,7 @@ frontend = [
   "wasm-bindgen-futures",
   "yew"
 ]
-backend = ["rust_wasm_rpcgen/backend", "tokio", "warp"]
+backend = ["rust_wasm_rpcgen/backend", "tokio", "warp", "lazy_static", "uuid"]
 
 [profile.release]
 opt-level = "s"
@@ -28,6 +28,9 @@ serde_derive = "^1.0.59"
 # Backend deps
 tokio = { version = "0.2", features = ["full"], optional = true }
 warp = { version = "0.2", optional = true }
+lazy_static = { version = "1.4", optional = true }
+uuid = { version = "0.4", features = ["v4"], optional = true }
+
 
 # Frontend deps
 wasm-bindgen = { version = "0.2.68", features = ["serde-serialize"], optional = true  }

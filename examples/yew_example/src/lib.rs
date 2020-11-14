@@ -5,57 +5,59 @@ use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
 mod todo;
-use todo::{mark_as_done};
 
-struct Model {
+mod components;
+use components::todo_list::TodoList;
+use components::new_todo::NewTodo;
+use todo::{Todo, get_todos};
+
+struct AppRoot {
     link: ComponentLink<Self>,
-    value: String,
+    todos: Vec<Todo>
 }
 
-enum Msg {
-    UpdateTodoContent(String),
+enum AppRootMessage {
+    Refresh,
+    GotTodos(Vec<Todo>)
 }
 
-impl Component for Model {
-    type Message = Msg;
+impl Component for AppRoot {
+    type Message = AppRootMessage;
     type Properties = ();
+
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            value: String::from(""),
+            todos: vec![]
         }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::UpdateTodoContent(content) => {
-                self.value = content;
-                let value_clone = self.value.clone();
-
+            AppRootMessage::Refresh => {
+                let link = self.link.clone();
                 spawn_local(async move {
-                    mark_as_done(1).await;
+                    let todos = get_todos().await;
+                    link.send_message(AppRootMessage::GotTodos(todos));
                 });
+            },
+            AppRootMessage::GotTodos(new_todos) => {
+                self.todos = new_todos;
             }
         }
         true
     }
 
     fn change(&mut self, _props: Self::Properties) -> ShouldRender {
-        // Should only return "true" if new properties are different to
-        // previously received properties.
-        // This component has no properties so we will always return "false".
         false
     }
 
     fn view(&self) -> Html {
         html! {
             <div>
-                <input
-                    value={&self.value}
-                    oninput=self.link.callback(|inp: InputData| {
-                       Msg::UpdateTodoContent(inp.value)
-                    })
-                />
+                <button onclick=self.link.callback(|_| AppRootMessage::Refresh)>{ "Refresh" }</button>
+                <TodoList todos=self.todos.clone() />
+                <NewTodo />
             </div>
         }
     }
@@ -63,5 +65,5 @@ impl Component for Model {
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    App::<Model>::new().mount_to_body();
+    App::<AppRoot>::new().mount_to_body();
 }

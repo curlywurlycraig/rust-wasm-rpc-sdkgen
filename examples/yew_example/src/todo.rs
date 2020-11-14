@@ -1,25 +1,29 @@
 use rust_wasm_rpcgen::remote;
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct Todo {
-    pub id: u8,
+    pub id: String,
     pub content: String,
     pub completed: bool
 }
 
 #[remote]
 pub fn get_todos() -> Vec<Todo> {
-    // In reality, these could come from some SQL DB or similar.
-    vec![
-        Todo { id: 10, content: String::from("Create new project"), completed: true },
-        Todo { id: 10, content: String::from("Finish new project"), completed: false },
-    ]
+    use crate::store;
+    store::get_todos()
 }
 
 #[remote]
-pub fn add_todo(new_todo: Todo) {
-    println!("Got a new todo! {:?}", &new_todo);
+pub fn add_todo(content: String) {
+    use crate::store;
+    use uuid::Uuid;
+
+    store::add_todo(Todo {
+        content,
+        completed: false,
+        id: Uuid::new_v4().hyphenated().to_string()
+    });
 }
 
 #[remote]

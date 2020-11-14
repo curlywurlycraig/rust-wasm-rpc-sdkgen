@@ -1,6 +1,11 @@
 use warp::Filter;
 
 mod todo;
+mod store;
+
+#[macro_use]
+extern crate lazy_static;
+
 use todo::{add_todo, get_todos, mark_as_done};
 
 #[tokio::main]
