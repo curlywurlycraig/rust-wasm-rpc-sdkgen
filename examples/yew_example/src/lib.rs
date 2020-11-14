@@ -76,7 +76,10 @@ impl Component for AppRoot {
             <div>
                 <button onclick=self.link.callback(|_| AppRootMessage::Refresh)>{ "Refresh" }</button>
                 <TodoList todos=self.todos.clone() />
-                <NewTodo oncreate=self.link.callback(|todo| AppRootMessage::AddTodo(todo)) />
+                <NewTodo
+                    oncreate=self.link.callback(|todo| AppRootMessage::AddTodo(todo))
+                    disabled=self.pending_add_todo
+                />
             </div>
         }
     }

@@ -5,7 +5,8 @@ use crate::todo::{Todo};
 pub struct NewTodo {
     link: ComponentLink<Self>,
     content: String,
-    oncreate: Callback<Todo>
+    oncreate: Callback<Todo>,
+    disabled: bool
 }
 
 pub enum Msg {
@@ -15,7 +16,8 @@ pub enum Msg {
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
-    pub oncreate: Callback<Todo>
+    pub oncreate: Callback<Todo>,
+    pub disabled: bool
 }
 
 impl Component for NewTodo {
@@ -25,7 +27,8 @@ impl Component for NewTodo {
         Self {
             link,
             content: String::from(""),
-            oncreate: props.oncreate
+            oncreate: props.oncreate,
+            disabled: props.disabled
         }
     }
 
@@ -48,20 +51,25 @@ impl Component for NewTodo {
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        false
+        self.disabled = props.disabled;
+        true
     }
 
     fn view(&self) -> Html {
         html! {
             <div>
                 <input
-                    value={&self.content}
+                    disabled=self.disabled
+                    value=&self.content
                     oninput=self.link.callback(|inp: InputData| {
                        Msg::UpdateTodoContent(inp.value)
                     })
                 />
 
-                <button onclick=self.link.callback(|_| Msg::Submit)>
+                <button
+                    onclick=self.link.callback(|_| Msg::Submit)
+                    disabled=self.disabled
+                >
                     { "Submit" }
                 </button>
             </div>
