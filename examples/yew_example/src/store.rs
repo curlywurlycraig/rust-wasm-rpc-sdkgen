@@ -15,3 +15,13 @@ pub fn get_todos() -> Vec<Todo> {
 pub fn add_todo(new_todo: Todo) {
     TODO_STORE.lock().unwrap().insert(new_todo.id.clone(), new_todo);
 }
+
+pub fn set_completed(id: String, completed: bool) {
+    let mut store = TODO_STORE.lock().unwrap();
+    let existing = store.get(&id.clone()).unwrap().clone();
+    store.insert(id, Todo {
+        completed,
+        id: existing.id,
+        content: existing.content
+    });
+}

@@ -27,6 +27,8 @@ pub fn add_todo(content: String) {
 }
 
 #[remote]
-pub fn mark_as_done(id: u8) {
-    println!("Marking as done! {}", id);
+pub fn set_completed(id: String, completed: bool) {
+    use crate::store;
+
+    store::set_completed(id, completed);
 }

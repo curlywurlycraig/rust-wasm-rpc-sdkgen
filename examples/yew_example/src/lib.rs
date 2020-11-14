@@ -1,4 +1,5 @@
 #![cfg(feature = "frontend")]
+#![recursion_limit="1024"]
 
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::spawn_local;
@@ -10,6 +11,8 @@ mod components;
 use components::todo_list::TodoList;
 use components::new_todo::NewTodo;
 use todo::{Todo, get_todos};
+
+
 
 struct AppRoot {
     link: ComponentLink<Self>,

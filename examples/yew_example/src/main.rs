@@ -6,7 +6,7 @@ mod store;
 #[macro_use]
 extern crate lazy_static;
 
-use todo::{add_todo, get_todos, mark_as_done};
+use todo::{add_todo, get_todos, set_completed};
 
 #[tokio::main]
 async fn main() {
@@ -22,15 +22,15 @@ async fn main() {
             add_todo(&body)
         }).with(warp::cors().allow_any_origin());
 
-    let mark_as_done = warp::path!("rpc" / "mark_as_done")
+    let set_completed = warp::path!("rpc" / "set_completed")
         .and(warp::body::bytes())
         .map(|body: warp::hyper::body::Bytes| {
-            mark_as_done(&body)
+            set_completed(&body)
         }).with(warp::cors().allow_any_origin());
 
     let routes = get_todo
         .or(add_todo)
-        .or(mark_as_done);
+        .or(set_completed);
 
     warp::serve(routes)
         .run(([127, 0, 0, 1], 3030))
