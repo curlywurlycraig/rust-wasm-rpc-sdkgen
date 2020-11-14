@@ -36,7 +36,9 @@ impl Component for TodoList {
             <div>
                 { for self.todos.iter().map(
                     |todo| html! {
-                        <p>{ &todo.content }</p>
+                        <div>
+                            <input type="checkbox" checked=&todo.completed />
+                            <p>{ &todo.content }</p>
                     })
                 }
             </div>
