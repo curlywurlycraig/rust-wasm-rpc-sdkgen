@@ -10,18 +10,19 @@ mod todo;
 mod components;
 use components::todo_list::TodoList;
 use components::new_todo::NewTodo;
-use todo::{Todo, get_todos};
-
-
+use todo::{Todo, get_todos, add_todo};
 
 struct AppRoot {
     link: ComponentLink<Self>,
-    todos: Vec<Todo>
+    todos: Vec<Todo>,
+    pending_add_todo: bool
 }
 
 enum AppRootMessage {
     Refresh,
-    GotTodos(Vec<Todo>)
+    GotTodos(Vec<Todo>),
+    AddTodo(Todo),
+    AddTodoSuccess(Todo)
 }
 
 impl Component for AppRoot {
@@ -31,7 +32,8 @@ impl Component for AppRoot {
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            todos: vec![]
+            todos: vec![],
+            pending_add_todo: false
         }
     }
 
@@ -46,6 +48,20 @@ impl Component for AppRoot {
             },
             AppRootMessage::GotTodos(new_todos) => {
                 self.todos = new_todos;
+            },
+            AppRootMessage::AddTodo(new_todo) => {
+                self.pending_add_todo = true;
+
+                let link_clone = self.link.clone();
+                let cloned_content = new_todo.content.clone();
+                spawn_local(async move {
+                    let new_todo = add_todo(cloned_content).await;
+                    link_clone.send_message(AppRootMessage::AddTodoSuccess(new_todo))
+                });
+            },
+            AppRootMessage::AddTodoSuccess(new_todo) => {
+                self.todos.push(new_todo);
+                self.pending_add_todo = false;
             }
         }
         true
@@ -60,7 +76,7 @@ impl Component for AppRoot {
             <div>
                 <button onclick=self.link.callback(|_| AppRootMessage::Refresh)>{ "Refresh" }</button>
                 <TodoList todos=self.todos.clone() />
-                <NewTodo />
+                <NewTodo oncreate=self.link.callback(|todo| AppRootMessage::AddTodo(todo)) />
             </div>
         }
     }

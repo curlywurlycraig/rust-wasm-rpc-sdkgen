@@ -1,11 +1,11 @@
 use yew::prelude::*;
-use wasm_bindgen_futures::spawn_local;
 
-use crate::todo::{add_todo, get_todos};
+use crate::todo::{Todo};
 
 pub struct NewTodo {
     link: ComponentLink<Self>,
     content: String,
+    oncreate: Callback<Todo>
 }
 
 pub enum Msg {
@@ -13,13 +13,19 @@ pub enum Msg {
     Submit
 }
 
+#[derive(Properties, Clone, PartialEq)]
+pub struct Props {
+    pub oncreate: Callback<Todo>
+}
+
 impl Component for NewTodo {
     type Message = Msg;
-    type Properties = ();
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+    type Properties = Props;
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
             content: String::from(""),
+            oncreate: props.oncreate
         }
     }
 
@@ -29,17 +35,19 @@ impl Component for NewTodo {
                 self.content = content;
             },
             Msg::Submit => {
-                let cloned_content = self.content.clone();
-                spawn_local(async move {
-                    add_todo(cloned_content).await;
-                    get_todos().await;
+                self.oncreate.emit(Todo {
+                    content: self.content.clone(),
+                    id: String::from("-1"),
+                    completed: false
                 });
+
+                self.content = String::from("");
             }
         }
         true
     }
 
-    fn change(&mut self, _props: Self::Properties) -> ShouldRender {
+    fn change(&mut self, props: Self::Properties) -> ShouldRender {
         false
     }
 

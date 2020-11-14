@@ -15,15 +15,19 @@ pub fn get_todos() -> Vec<Todo> {
 }
 
 #[remote]
-pub fn add_todo(content: String) {
+pub fn add_todo(content: String) -> Todo {
     use crate::store;
     use uuid::Uuid;
 
-    store::add_todo(Todo {
+    let new_todo = Todo {
         content,
         completed: false,
         id: Uuid::new_v4().hyphenated().to_string()
-    });
+    };
+
+    store::add_todo(new_todo.clone());
+
+    new_todo
 }
 
 #[remote]
