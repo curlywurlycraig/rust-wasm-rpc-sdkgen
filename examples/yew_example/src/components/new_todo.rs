@@ -2,6 +2,8 @@ use yew::prelude::*;
 
 use crate::todo::{Todo};
 
+static INPUT_STYLE: &str = "margin-right: 20px";
+
 pub struct NewTodo {
     link: ComponentLink<Self>,
     content: String,
@@ -64,13 +66,15 @@ impl Component for NewTodo {
                     oninput=self.link.callback(|inp: InputData| {
                        Msg::UpdateTodoContent(inp.value)
                     })
+                    placeholder="Go for a bike ride"
+                    style=INPUT_STYLE
                 />
 
                 <button
                     onclick=self.link.callback(|_| Msg::Submit)
                     disabled=self.disabled
                 >
-                    { "Submit" }
+                    { "Add todo" }
                 </button>
             </div>
         }

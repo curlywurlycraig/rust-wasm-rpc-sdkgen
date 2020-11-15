@@ -4,58 +4,63 @@ use wasm_bindgen_futures::spawn_local;
 
 use crate::todo::{Todo, set_completed};
 
+static CONTAINER_STYLE: &str = "";
+static TODO_CONTAINER_STYLE: &str = "
+display: flex;
+flex-direction: row;
+align-items: center";
+
 pub struct TodoList {
     link: ComponentLink<Self>,
-    todos: Vec<Todo>,
+    props: Props,
 }
 
 #[derive(Properties, Clone, PartialEq)]
-pub struct TodoListProps {
-    pub todos: Vec<Todo>
+pub struct Props {
+    pub todos: Vec<Todo>,
+    pub on_toggle_todo: Callback<String>
 }
 
-pub enum TodoListMessage {
+pub enum Msg {
     ToggleTodo(String)
 }
 
 impl Component for TodoList {
-    type Message = TodoListMessage;
-    type Properties = TodoListProps;
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+    type Message = Msg;
+    type Properties = Props;
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
             link,
-            todos: vec![],
+            props,
         }
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            TodoListMessage::ToggleTodo(todo_id) => {
-                spawn_local(async move {
-                    set_completed(todo_id, true).await;
-                });
-                true
+            Msg::ToggleTodo(todo_id) => {
+                self.props.on_toggle_todo.emit(todo_id);
+                false
             }
         }
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.todos = props.todos;
+        self.props = props;
         true
     }
 
     fn view(&self) -> Html {
         html! {
-            <div>
-                { for self.todos.iter().map(
+            <div style=CONTAINER_STYLE>
+                { for self.props.todos.iter().map(
                     |todo| {
                         let todo_id = todo.id.clone();
                         html! {
-                            <div style="display: flex; flex-direction: row; align-items: center">
+                            <div style=TODO_CONTAINER_STYLE>
                                 <input
                                     type="checkbox"
                                     checked=todo.completed
-                                    onclick=self.link.callback(move |_| TodoListMessage::ToggleTodo(todo_id.clone()))
+                                    onclick=self.link.callback(move |_| Msg::ToggleTodo(todo_id.clone()))
                                 />
                                 <p>{ &todo.content }</p>
                             </div>
